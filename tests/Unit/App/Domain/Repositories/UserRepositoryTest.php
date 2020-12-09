@@ -12,7 +12,7 @@ class UserRepositoryTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function it_can_list_the_users()
+    public function can_list_the_users()
     {
         $data = [
             'name' => 'Test User',
@@ -32,7 +32,7 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_the_user()
+    public function can_delete_the_user()
     {
         $data = [
             'name' => 'Test User',
@@ -43,13 +43,13 @@ class UserRepositoryTest extends TestCase
         $user = User::factory()->create($data);
 
         $repo = new UserRepository($user);
-        $deleted =$repo->deleteUser();
+        $repo->deleteUser();
 
-        $this->assertTrue($deleted);
+        $this->assertDeleted($user);
     }
 
     /** @test */
-    public function it_can_update_the_user()
+    public function can_update_the_user()
     {
         $data = [
             'name' => 'Test User',
@@ -70,7 +70,7 @@ class UserRepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_can_show_the_user()
+    public function can_show_the_user()
     {
         $data = [
             'name' => 'Test User',
@@ -81,15 +81,15 @@ class UserRepositoryTest extends TestCase
         $user = User::factory()->create($data);
 
         $repo = new UserRepository(new User);
-        $found =$repo->findUserById($user->id);
+        $foundedUser =$repo->findUserById($user->id);
 
-        $this->assertInstanceOf(User::class, $found);
-        $this->assertEquals($user->name, $found->name);
-        $this->assertEquals($user->email, $found->email);
+        $this->assertInstanceOf(User::class,  $foundedUser);
+        $this->assertEquals($user->name,  $foundedUser->name);
+        $this->assertEquals($user->email,  $foundedUser->email);
     }
 
     /** @test */
-    public function it_can_create_a_user()
+    public function can_create_a_user()
     {
         $data = [
             'name' => 'Test User',

@@ -3,9 +3,10 @@
 namespace App\Domain\Repositories;
 
 use App\Models\User;
-use App\Domain\Abstracts\BaseRepository;
+
 use App\Domain\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -25,7 +26,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function createUser(array $data): User
     {
-        // TODO: Implement createUser() method.
+        $data['password'] = Hash::make($data['password']);
+        return $this->create($data);
     }
 
     /**
@@ -34,16 +36,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function updateUser(array $data): bool
     {
-        // TODO: Implement updateUser() method.
+        return $this->update($data);
     }
 
     /**
-     * @param int $id
-     * @return bool
+     * @throws \Exception
      */
-    public function deleteUser(int $id): bool
+    public function deleteUser()
     {
-        // TODO: Implement deleteUser() method.
+       return $this->delete();
     }
 
     /**
@@ -52,7 +53,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function findUserById(int $id): User
     {
-        // TODO: Implement findUserById() method.
+        return $this->find($id);
     }
 
     /**
@@ -60,7 +61,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function listUsers(): Collection
     {
-        // TODO: Implement listUsers() method.
+        return $this->all();
     }
 
     /**

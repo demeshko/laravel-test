@@ -4,6 +4,8 @@
 namespace App\Domain\Contracts;
 
 
+use Illuminate\Database\Eloquent\Collection;
+
 interface BaseRepositoryInterface
 {
     /**
@@ -19,11 +21,9 @@ interface BaseRepositoryInterface
     public function update(array $data) : bool;
 
     /**
-     * @param string $orderBy
-     * @param string $sortBy
-     * @return mixed
+     * @return Collection
      */
-    public function all(string $orderBy = 'id', string $sortBy = 'asc');
+    public function all(): Collection;
 
     /**
      * @param $id
@@ -34,5 +34,5 @@ interface BaseRepositoryInterface
     /**
      * @return bool
      */
-    public function delete() : bool;
+    public function delete();
 }

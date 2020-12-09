@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Domain\Abstracts;
+namespace App\Domain\Repositories;
 
 use App\Domain\Contracts\BaseRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements BaseRepositoryInterface
@@ -24,7 +25,7 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function create(array $data)
     {
-        // TODO: Implement create() method.
+        return $this->model->create($data);
     }
 
     /**
@@ -33,17 +34,15 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function update(array $data): bool
     {
-        // TODO: Implement update() method.
+        return $this->model->update($data);
     }
 
     /**
-     * @param string $orderBy
-     * @param string $sortBy
-     * @return mixed
+     * @return Collection
      */
-    public function all(string $orderBy = 'id', string $sortBy = 'asc')
+    public function all(): Collection
     {
-        // TODO: Implement all() method.
+        return $this->model->all();
     }
 
     /**
@@ -52,14 +51,15 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function find($id)
     {
-        // TODO: Implement find() method.
+        return $this->model->findOrFail($id);
     }
 
     /**
      * @return bool
+     * @throws \Exception
      */
-    public function delete(): bool
+    public function delete()
     {
-        // TODO: Implement delete() method.
+        $this->model->delete();
     }
 }

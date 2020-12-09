@@ -14,5 +14,4 @@ interface UserRepositoryInterface
     public function createUser(array $data): User;
     public function updateUser(array $data): bool;
     public function deleteUser();
-
 }

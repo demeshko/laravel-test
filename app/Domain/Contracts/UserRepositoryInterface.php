@@ -3,7 +3,7 @@
 namespace App\Domain\Contracts;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 
 interface UserRepositoryInterface
 {
@@ -13,5 +13,5 @@ interface UserRepositoryInterface
     public function listNonPrivilegedUsers(): Collection;
     public function createUser(array $data): User;
     public function updateUser(array $data): bool;
-    public function deleteUser();
+    public function deleteUser(int $id);
 }

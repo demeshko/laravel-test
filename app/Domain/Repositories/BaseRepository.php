@@ -46,20 +46,21 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return mixed
      */
-    public function find($id)
+    public function find(int $id)
     {
         return $this->model->findOrFail($id);
     }
 
     /**
+     * @param int $id
      * @return bool
-     * @throws \Exception
      */
-    public function delete()
+    public function delete(int $id): bool
     {
-        $this->model->delete();
+        $result = $this->find($id);
+        return $result->delete();
     }
 }

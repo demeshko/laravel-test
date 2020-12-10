@@ -6,6 +6,7 @@ use App\Models\User;
 
 use App\Domain\Contracts\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
@@ -40,11 +41,15 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @throws \Exception
+     * @param int $id
+     * @return bool
      */
-    public function deleteUser()
+    public function deleteUser(int $id = null): bool
     {
-       return $this->delete();
+       if(!is_null($id)) {
+           return $this->delete($id);
+       }
+       return $this->model->delete();
     }
 
     /**
@@ -65,11 +70,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return Collection
+     * @return \Illuminate\Support\Collection
      */
-    public function listAdminUsers(): Collection
+    public function listAdminUsers(): \Illuminate\Support\Collection
     {
-        // TODO: Implement listAdminUsers() method.
+        return $this->model->where('is_admin', true)->get();
     }
 
     /**
@@ -77,6 +82,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      */
     public function listNonPrivilegedUsers(): Collection
     {
-        // TODO: Implement listNonPrivilegedUsers() method.
+        return $this->model->where('is_admin', false)->get();
     }
 }

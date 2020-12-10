@@ -105,4 +105,44 @@ class UserRepositoryTest extends TestCase
         $this->assertEquals($data['email'], $user->email);
     }
 
+    /** @test */
+    public function can_list_the_admin_users()
+    {
+        $data = [
+            'name' => 'Test User',
+            'email' => 'example@example.com',
+            'password' => 'secret',
+            'is_admin' => true
+        ];
+
+        $user = User::factory()->create($data);
+
+        $repo = new UserRepository(new User);
+        $users = $repo->listAdminUsers();
+
+        $users->each(function (User $item) use ($user) {
+            $this->assertEquals($user->is_admin, $item->is_admin);
+        });
+    }
+
+    /** @test */
+    public function can_list_the_non_privileged_users()
+    {
+        $data = [
+            'name' => 'Test User',
+            'email' => 'example@example.com',
+            'password' => 'secret',
+            'is_admin' => false
+        ];
+
+        $user = User::factory()->create($data);
+
+        $repo = new UserRepository(new User);
+        $users = $repo->listNonPrivilegedUsers();
+
+        $users->each(function (User $item) use ($user) {
+            $this->assertIsBool($item->is_admin);
+            $this->assertEquals($user->is_admin, $item->is_admin);
+        });
+    }
 }

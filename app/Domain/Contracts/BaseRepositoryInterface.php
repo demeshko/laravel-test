@@ -26,13 +26,13 @@ interface BaseRepositoryInterface
     public function all(): Collection;
 
     /**
-     * @param $id
+     * @param int $id
      * @return mixed
      */
-    public function find($id);
+    public function find(int $id);
 
     /**
      * @return bool
      */
-    public function delete();
+    public function delete(int $id);
 }

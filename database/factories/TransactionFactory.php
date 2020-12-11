@@ -28,7 +28,7 @@ class TransactionFactory extends Factory
             'type' => $this->faker->randomElement([
                 TransactionTypeEnum::CREDIT(),
                 TransactionTypeEnum::DEBIT()]),
-            'amount' => number_format($this->faker->randomFloat(3, 1 , 2000),2),
+            'amount' => (float) $this->faker->randomNumber(5),
         ];
     }
 }

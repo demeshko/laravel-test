@@ -16,9 +16,10 @@ interface BaseRepositoryInterface
 
     /**
      * @param array $data
+     * @param int $id
      * @return bool
      */
-    public function update(array $data) : bool;
+    public function update(array $data, int $id) : bool;
 
     /**
      * @return Collection
@@ -32,6 +33,7 @@ interface BaseRepositoryInterface
     public function find(int $id);
 
     /**
+     * @param int $id
      * @return bool
      */
     public function delete(int $id);

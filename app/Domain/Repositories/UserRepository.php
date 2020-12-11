@@ -5,6 +5,7 @@ namespace App\Domain\Repositories;
 use App\Models\User;
 
 use App\Domain\Contracts\UserRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -33,11 +34,12 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     /**
      * @param array $data
+     * @param int|null $id
      * @return bool
      */
-    public function updateUser(array $data): bool
+    public function updateUser(array $data, int $id): bool
     {
-        return $this->update($data);
+        return $this->update($data, $id);
     }
 
     /**
@@ -56,7 +58,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param int $id
      * @return User
      */
-    public function findUserById(int $id): User
+    public function findUser(int $id): User
     {
         return $this->find($id);
     }
@@ -67,6 +69,29 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function listUsers(): Collection
     {
         return $this->all();
+    }
+
+    /**
+     * @param int $limit
+     * @return Builder[]|Collection
+     */
+    public function listLastCreatedUsers(int $limit = 10): Collection
+    {
+        return User::with('transactions')
+            ->orderBy('id', 'desc')
+            ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * @param array $data
+     * @param int $id
+     * @return mixed
+     */
+    public function createUserTransaction(array $data, int $id)
+    {
+        $user = $this->findUser($id);
+        return $user->transactions()->create($data);
     }
 
     /**

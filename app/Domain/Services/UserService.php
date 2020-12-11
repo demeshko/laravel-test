@@ -4,6 +4,7 @@
 namespace App\Domain\Services;
 use App\Domain\Contracts\UserServiceInterface;
 use App\Domain\Repositories\UserRepository;
+use App\Models\User;
 
 class UserService implements UserServiceInterface
 {
@@ -24,25 +25,27 @@ class UserService implements UserServiceInterface
      */
     public function createUser(array $data)
     {
-        // TODO: Implement createUser() method.
+        return $this->repo->createUser($data);
     }
 
     /**
      * @param array $data
+     * @param int $id
      * @return mixed
      */
-    public function createUserTransaction(array $data)
+    public function createUserTransaction(array $data, int $id)
     {
-        // TODO: Implement createUserTransaction() method.
+        return $this->repo->createUserTransaction($data, $id);
     }
 
     /**
      * @param array $data
+     * @param int $id
      * @return mixed
      */
-    public function updateUser(array $data)
+    public function updateUser(array $data, int $id)
     {
-        // TODO: Implement updateUser() method.
+        return $this->repo->updateUser($data, $id);
     }
 
     /**
@@ -51,15 +54,15 @@ class UserService implements UserServiceInterface
      */
     public function deleteUser(int $id)
     {
-        // TODO: Implement deleteUser() method.
+        return $this->repo->deleteUser($id);
     }
 
     /**
      * @param int $id
      */
-    public function findUser(int $id)
+    public function findUser(int $id): User
     {
-        // TODO: Implement findUser() method.
+        return $this->repo->findUser($id);
     }
 
     /**
@@ -68,6 +71,6 @@ class UserService implements UserServiceInterface
      */
     public function listLastCreatedUsers(int $limit = 10)
     {
-        // TODO: Implement listLastCreatedUsers() method.
+        return $this->repo->listLastCreatedUsers($limit);
     }
 }

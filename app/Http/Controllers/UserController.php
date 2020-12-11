@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\Services\UserService;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -18,35 +19,38 @@ class UserController extends Controller
         $this->service = $service;
     }
 
-
     public function createUser(Request $request)
     {
-
+        $request->validate([
+            'name' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email|email:rfc,dns',
+        ]);
+        $user = $this->service->createUser($request->all());
+        return response()->json($user);
     }
 
-    public function updateUser()
+    public function updateUser(Request $request, User $user)
     {
-
+        return response()->json($this->service->updateUser($request->all(), $user->id));
     }
 
-    public function deleteUser()
+    public function deleteUser(User $user)
     {
-
+        return response()->json($this->service->deleteUser($user->id));
     }
 
-    public function listUsers()
+    public function showUser(User $user)
     {
-
+        return response()->json($user);
     }
 
     public function createUserTransaction(Request $request)
     {
-
+        return response()->json($this->service->createUserTransaction($request->all(), Auth()->user()->id));
     }
 
-    public function listLastCreatedUsers()
+    public function listLastCreatedUsersWithTransactions()
     {
-        $userList = $this->service->listLastCreatedUsers();
-        response()->json($userList);
+        return response()->json($this->service->listLastCreatedUsers());
     }
 }

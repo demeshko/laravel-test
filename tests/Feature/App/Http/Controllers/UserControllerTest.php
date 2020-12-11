@@ -2,50 +2,76 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Enums\TransactionTypeEnum;
+use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
 {
+    use RefreshDatabase;
 
-    public function testListUsers()
+    private User $user;
+
+    protected function setUp(): void
     {
-        $response = $this->get('/users');
+        parent::setUp();
+        $this->user = User::factory()->create([
+            'is_admin' => true
+        ]);
+        $this->seed();
+    }
 
+    public function testCanShowUser()
+    {
+        $user = User::factory()->create([
+            'name' => 'TestName123',
+            'email' => 'example123@example.com',
+            'is_admin' => true
+        ]);
+        $response = $this->get(route('users.show', $user->id));
+        $response->assertStatus(200)
+            ->assertJson([
+                'name' => 'TestName123',
+                'email' => 'example123@example.com',
+                'is_admin' => true,
+        ]);
+    }
+
+    public function testCanCreateUserTransaction()
+    {
+        $this->actingAs($this->user);
+        $response = $this->postJson(route('users.create.transaction', $this->user), [
+            'type' => TransactionTypeEnum::CREDIT(),
+            'amount' => (float) 1500,
+        ]);
+        $response->assertStatus(200)->assertJson([
+            "type" => "credit",
+            "amount" => 1500
+        ]);
+    }
+
+    public function testCanDeleteUser()
+    {
+        $response = $this->delete(route('users.delete', $this->user->id));
         $response->assertStatus(200);
     }
 
-    public function testCreateUser()
+    public function testCanUpdateUser()
     {
-        $response = $this->post('/users');
-
+        $user = User::factory()->create([
+            'name' => 'TestName123',
+            'email' => 'example123@example.com',
+            'is_admin' => true
+        ]);
+        $response = $this->putJson(route('users.update', $this->user->id));
         $response->assertStatus(200);
     }
 
-    public function testCreateUserTransaction()
+    public function testCanListLastCreatedUsersWithTransactions()
     {
-        $response = $this->post('/users/transaction');
-
-        $response->assertStatus(200);
-    }
-
-    public function testDeleteUser()
-    {
-        $response = $this->delete('/users/{user}');
-
-        $response->assertStatus(200);
-    }
-
-    public function testUpdateUser()
-    {
-        $response = $this->put('/users');
-
-        $response->assertStatus(200);
-    }
-
-    public function testListLastCreatedUsers()
-    {
-        $response = $this->get('/users/list');
-
+        $response = $this->get(route('users.list.transaction'));
         $response->assertStatus(200);
     }
 }

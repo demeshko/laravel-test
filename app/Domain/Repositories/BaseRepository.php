@@ -30,11 +30,13 @@ class BaseRepository implements BaseRepositoryInterface
 
     /**
      * @param array $data
+     * @param int $id
      * @return bool
      */
-    public function update(array $data): bool
+    public function update(array $data, int $id): bool
     {
-        return $this->model->update($data);
+        $result = $this->find($id);
+        return $result->update($data);
     }
 
     /**

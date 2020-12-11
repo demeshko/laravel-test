@@ -64,7 +64,7 @@ class UserRepositoryTest extends TestCase
         ];
 
         $repo = new UserRepository($user);
-        $updated = $repo->updateUser($update);
+        $updated = $repo->updateUser($update, $user->id);
 
         $this->assertTrue($updated);
     }
@@ -81,7 +81,7 @@ class UserRepositoryTest extends TestCase
         $user = User::factory()->create($data);
 
         $repo = new UserRepository(new User);
-        $foundedUser =$repo->findUserById($user->id);
+        $foundedUser =$repo->findUser($user->id);
 
         $this->assertInstanceOf(User::class,  $foundedUser);
         $this->assertEquals($user->name,  $foundedUser->name);

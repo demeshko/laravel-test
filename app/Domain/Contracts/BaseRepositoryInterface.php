@@ -36,5 +36,5 @@ interface BaseRepositoryInterface
      * @param int $id
      * @return bool
      */
-    public function delete(int $id);
+    public function delete(int $id): bool;
 }

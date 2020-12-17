@@ -71,7 +71,19 @@ class UserControllerTest extends TestCase
 
     public function testCanListLastCreatedUsersWithTransactions()
     {
+        $user = User::factory()->create([
+            'name' => 'TestName123',
+            'email' => 'example123@example.com',
+            'is_admin' => true
+        ]);
+        $user->transactions()->createMany([
+            ['type' => 'debit', 'amount' => (float) 1000],
+            ['type' => 'debit', 'amount' => (float) 1000],
+            ['type' => 'credit', 'amount' => (float) 1000],
+        ]);
         $response = $this->get(route('users.list.transaction'));
-        $response->assertStatus(200);
+        $response->assertStatus(200)->assertJsonFragment([
+            'debit_transactions_sum' => '2000'
+        ]);
     }
 }

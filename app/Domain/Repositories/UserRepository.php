@@ -78,8 +78,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function listLastCreatedUsers(int $limit = 10): Collection
     {
         return User::with('transactions')
-            ->whereHas('transactions')
-            ->addSelect(['debet_transaction_sum' => function ($query) {
+            ->addSelect(['debit_transactions_sum' => function ($query) {
                 $query->select(DB::raw('SUM(amount)'))
                 ->from('transactions')
                 ->whereColumn('transactions.user_id', 'users.id')

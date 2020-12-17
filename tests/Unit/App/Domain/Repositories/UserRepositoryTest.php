@@ -145,4 +145,27 @@ class UserRepositoryTest extends TestCase
             $this->assertEquals($user->is_admin, $item->is_admin);
         });
     }
+
+    /** @test */
+    public function can_list_last_created_users_with_transactions()
+    {
+        $data = [
+            'name' => 'Test User',
+            'email' => 'example@example.com',
+            'password' => 'secret',
+            'is_admin' => false
+        ];
+
+        $user = User::factory()->create($data);
+        $user->transactions()->createMany([
+            ['type' => 'debit', 'amount' => (float) 1000],
+            ['type' => 'debit', 'amount' => (float) 1000],
+            ['type' => 'credit', 'amount' => (float) 1000],
+        ]);
+        $repo = new UserRepository(new User);
+        $users = $repo->listLastCreatedUsers();
+        $testUser = $users->find($user->id);
+        $this->assertEquals($testUser->debit_transactions_sum, '2000');
+    }
+
 }

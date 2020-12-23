@@ -102,9 +102,9 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function listAdminUsers(): \Illuminate\Support\Collection
+    public function listAdminUsers(): Collection
     {
         return $this->model->where('is_admin', true)->get();
     }
